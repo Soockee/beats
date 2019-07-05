@@ -4,6 +4,7 @@ import (
 	"github.com/elastic/beats/libbeat/beat"
 	"github.com/elastic/beats/libbeat/common"
 
+	"github.com/elastic/beats/packetbeat/pb"
 	"github.com/elastic/beats/packetbeat/protos"
 )
 
@@ -29,6 +30,7 @@ func (pub *transPub) createEvent(requ, resp *message) beat.Event {
 
 	// resp_time in milliseconds
 	responseTime := int32(resp.Ts.Sub(requ.Ts).Nanoseconds() / 1e6)
+	pbf := pb.NewFields()
 
 	src := &common.Endpoint{
 		IP:      requ.Tuple.SrcIP.String(),
@@ -45,11 +47,10 @@ func (pub *transPub) createEvent(requ, resp *message) beat.Event {
 		"type":         "simpleprotocol",
 		"status":       status,
 		"responsetime": responseTime,
-		"bytes_in":     requ.Size,
-		"bytes_out":    resp.Size,
 		"src":          src,
 		"dst":          dst,
 	}
+	fields[pb.FieldsKey] = pbf
 
 	// add processing notes/errors to event
 	if len(requ.Notes)+len(resp.Notes) > 0 {

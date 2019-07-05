@@ -116,7 +116,6 @@ func (p *parser) parse() (*message, error) {
 		return nil, nil
 	}
 	msg := p.message
-	log.Println(msg)
 	msg.Size = uint64(p.buf.BufferConsumed())
 
 	isRequest := true
@@ -134,6 +133,7 @@ func (p *parser) parse() (*message, error) {
 		}
 		buf = buf[1:]
 	}
+	log.Printf("MSG isRequest: %t\n", isRequest)
 	// Set message fields
 	msg.content = common.NetString(buf)
 	msg.IsRequest = isRequest

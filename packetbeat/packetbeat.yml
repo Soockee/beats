@@ -11,7 +11,7 @@
 
 # Select the network interface to sniff the data. On Linux, you can use the
 # "any" keyword to sniff on all connected interfaces.
-packetbeat.interfaces.device: any
+packetbeat.interfaces.device: lo
 
 #================================== Flows =====================================
 
@@ -27,80 +27,51 @@ packetbeat.flows:
 #========================== Transaction protocols =============================
 
 packetbeat.protocols:
-- type: icmp
-  # Enable ICMPv4 and ICMPv6 monitoring. Default: false
-  enabled: true
 
-- type: amqp
+- type: simpleprotocol
   # Configure the ports where to listen for AMQP traffic. You can disable
   # the AMQP protocol by commenting out the list of ports.
-  ports: [5672]
-
-- type: cassandra
-  #Cassandra port for traffic monitoring.
-  ports: [9042]
-
+  ports: [3030]
+  enabled: true
+- type: icmp
+  enabled: false
+- type: tcp
+  enable: false
+- type: udp
+  enable: false
 - type: dhcpv4
-  # Configure the DHCP for IPv4 ports.
   ports: [67, 68]
-
+  enabled: false
 - type: dns
-  # Configure the ports where to listen for DNS traffic. You can disable
-  # the DNS protocol by commenting out the list of ports.
   ports: [53]
-
+  enabled: false
 - type: http
-  # Configure the ports where to listen for HTTP traffic. You can disable
-  # the HTTP protocol by commenting out the list of ports.
   ports: [80, 8080, 8000, 5000, 8002]
-
+  enabled: false
+- type: amqp
+  ports: [5672]
+  enabled: false
+- type: cassandra
+  ports: [9042]
+  enabled: false
 - type: memcache
-  # Configure the ports where to listen for memcache traffic. You can disable
-  # the Memcache protocol by commenting out the list of ports.
   ports: [11211]
-
+  enabled: false
 - type: mysql
-  # Configure the ports where to listen for MySQL traffic. You can disable
-  # the MySQL protocol by commenting out the list of ports.
   ports: [3306,3307]
-
-- type: pgsql
-  # Configure the ports where to listen for Pgsql traffic. You can disable
-  # the Pgsql protocol by commenting out the list of ports.
-  ports: [5432]
-
+  enabled: false
 - type: redis
-  # Configure the ports where to listen for Redis traffic. You can disable
-  # the Redis protocol by commenting out the list of ports.
   ports: [6379]
-
+  enabled: false
+- type: pgsql
+  ports: [5432]
+  enabled: false
 - type: thrift
-  # Configure the ports where to listen for Thrift-RPC traffic. You can disable
-  # the Thrift-RPC protocol by commenting out the list of ports.
   ports: [9090]
-
-- type: mongodb
-  # Configure the ports where to listen for MongoDB traffic. You can disable
-  # the MongoDB protocol by commenting out the list of ports.
-  ports: [27017]
-
-- type: nfs
-  # Configure the ports where to listen for NFS traffic. You can disable
-  # the NFS protocol by commenting out the list of ports.
-  ports: [2049]
-
+  enabled: false
 - type: tls
-  # Configure the ports where to listen for TLS traffic. You can disable
-  # the TLS protocol by commenting out the list of ports.
-  ports:
-    - 443   # HTTPS
-    - 993   # IMAPS
-    - 995   # POP3S
-    - 5223  # XMPP over SSL
-    - 8443
-    - 8883  # Secure MQTT
-    - 9243  # Elasticsearch
-
+  ports: [443, 993, 995, 5223, 8443, 8883, 9243]
+  enabled: false
 #==================== Elasticsearch template setting ==========================
 
 setup.template.settings:
@@ -235,3 +206,8 @@ processors:
 
 # This allows to enable 6.7 migration aliases
 #migration.6_to_7.enabled: true
+
+
+#================================= User-specifics ==============================
+
+packetbeat.procs.enabled: true

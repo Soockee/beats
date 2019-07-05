@@ -34,7 +34,7 @@ var (
 
 	// use isDebug/isDetailed to guard debugf/detailedf to minimize allocations
 	// (garbage collection) when debug log is disabled.
-	isDebug = false
+	isDebug = true
 )
 
 func init() {
